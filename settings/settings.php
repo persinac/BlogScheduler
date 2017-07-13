@@ -4,6 +4,8 @@
  * User: apersinger
  * Date: 3/14/2016
  * Time: 2:13 PM
+ *
+ * Most of these settings are not used
  */
 define('BOOTSTRAP_VERSION', '3.3.7');
 

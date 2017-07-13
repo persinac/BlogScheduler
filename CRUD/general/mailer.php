@@ -16,7 +16,7 @@ require '../../connections/bs_connection.php';
  *        empEmail => "<VAL>"
  *        empId => "<VAL>"
  *        date => "<VAL>"
- *        name => "<VAL>"
+ *        empName => "<VAL>"
  *      ]
  */
 function sendMail($sendToObj)
@@ -31,12 +31,16 @@ function sendMail($sendToObj)
     $mail->Password = SERVICE_ACCT_PW;                           // SMTP password
     $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
 
-    $mail->From = 'alexp@originfitnessinc.com';
-    $mail->FromName = 'Alex Persinger';
+//    $mail->From = 'alexp@originfitnessinc.com';
+//    $mail->FromName = 'Alex Persinger';
+    $mail->From = 'katherine@crossfitburke.com';
+    $mail->FromName = 'Katherine Hyatt';
+
     //Add Recipients
     $mail->addAddress($sendToObj->empEmail);     // Add a recipient
-    $mail->addReplyTo('alexp@originfitnessinc.com', 'Alex Persinger');
+    $mail->addReplyTo('katherine@crossfitburke.com', 'Katherine Hyatt');
     $mail->addCC('jamie@crossfitburke.com'); //CC Owner
+    $mail->addCC('alexp@originfitnessinc.com'); //CC Owner
 
     /*
     $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
@@ -45,21 +49,23 @@ function sendMail($sendToObj)
     $mail->isHTML(false);                                  // Set email format to HTML
     */
     $mail->Subject = 'Blog Notification - Blog Due';
-    $mail->Body = 'Hello ' . $sendToObj->name;
+    $mail->Body = 'Hello ' . $sendToObj->empName;
     $mail->Body .= "\n\nYour blog is due on " . $sendToObj->date .'.';
-    $mail->Body .= "\n\nPlease send to Alex Persinger for submission by 5pm this Sunday!";
+    $mail->Body .= "\n\nHere is your blog template: ";
+    $mail->Body .= "https://docs.google.com/a/originfitnessinc.com/forms/d/e/1FAIpQLSeUpWlxRg5WXh0AjjtzQLWLk7-t8g_yEi6zvCp4OI2dIQD71w/viewform";
+    $mail->Body .= "\n\nPlease send/complete for Katherine Hyatt by 5pm!";
     $mail->Body .= " If you have already submitted your blog, please ignore this message.";
 //    var_dump($sendToObj);
-//    if($sendToObj->empEmail == 'alexp@originfitnessinc.com') {
+    if($sendToObj->empEmail == 'alexp@originfitnessinc.com') {
         if (!$mail->send()) {
             echo 'Message could not be sent to ' . $sendToObj->empEmail . '</br>';
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
             echo 'Message has been sent to: ' . $sendToObj->empEmail . '</br>';
         }
-//    } else {
-//        echo "Would send mail to:" . $sendToObj->empEmail;
-//    }
+    } else {
+        echo "</br>Would send mail to:" . $sendToObj->empEmail;
+    }
 
 }
 

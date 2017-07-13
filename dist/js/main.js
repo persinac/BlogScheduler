@@ -25,12 +25,40 @@ function BuildSendAdHocEmailSection() {
 
 function BuildUploadNewBlogMonthDataSection() {
     var response = "";
-    response += '<input class="margin_10_px" type="file" name="fileToUpload" id="fileToUpload"></br>';
-    response += '<label for="fileType" class="inlinecheckBoxLabel padding_rgt_5_px">';
-    response += 'Employee List?'
-    response += '</label>';
-    response += '<input class="inlinecheckBox" type="checkbox" value="1", name="fileType" id="fileType" disabled>';
-    response += '<input class="absolutePosition margin_10_px" type="submit" value="Upload File" name="submit" onclick="UploadFile();"></br>';
+    response += '<div class="dropdown">';
+    response += '<button id="month_dd_btn" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">';
+    response += 'Month ';
+    response += '<span class="caret"></span></button>';
+    response += '<ul class="dropdown-menu" id="month_dropdown">';
+    response += '<li><a href="#" data-month="JAN">January</a></li>';
+    response += '<li><a href="#" data-month="FEB">Febuary</a></li>';
+    response += '<li><a href="#" data-month="MAR">March</a></li>';
+    response += '<li><a href="#" data-month="APR">April</a></li>';
+    response += '<li><a href="#" data-month="MAY">May</a></li>';
+    response += '<li><a href="#" data-month="JUN">June</a></li>';
+    response += '<li><a href="#" data-month="JULY">July</a></li>';
+    response += '<li><a href="#" data-month="AUG">August</a></li>';
+    response += '<li><a href="#" data-month="SEP">September</a></li>';
+    response += '<li><a href="#" data-month="OCT">October</a></li>';
+    response += '<li><a href="#" data-month="NOV">November</a></li>';
+    response += '<li><a href="#" data-month="DEC">December</a></li>';
+    response += '</ul>';
+    response += '</div>';
+    response += '<div class="dropdown">';
+    response += '<button id="year_dd_btn" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">';
+    response += 'Year';
+    response += '<span class="caret"></span></button>';
+    response += '<ul class="dropdown-menu" id="year_dropdown">';
+    response += '<li><a href="#" data-year="17">2017</a></li>';
+    response += '<li><a href="#" data-year="18">2018</a></li>';
+    response += '<li><a href="#" data-year="19">2019</a></li>';
+    response += '<li><a href="#" data-year="20">2020</a></li>';
+    response += '<li><a href="#" data-year="21">2021</a></li>';
+    response += '<li><a href="#" data-year="22">2022</a></li>';
+    response += '</ul>';
+    response += '</div>';
+    response += '<div><input class="margin_10_px" type="file" name="fileToUpload" id="fileToUpload"></div>';
+    response += '<div><input class="margin_10_px" type="submit" value="Upload File" name="submit" onclick="UploadFile();"></div>';
     $("#selectedAction").html(response);
 }
 
@@ -69,6 +97,8 @@ function BuildServiceAccountSetup() {
 
 function UploadFile() {
     var fileType = 0;
+    var month = $("#month_dropdown li a");
+    var year = $("#year_dropdown li a");
     var response = "<h3>Uploading...</h3>";
     var fileToUpload = $("#fileToUpload").prop('files')[0];
     if($("#fileType").is(':checked')) {fileType = 1};
@@ -155,6 +185,16 @@ function SubmitServiceAccount() {
             //$("#sendMailResponse").html(response);
         }
     });
+}
 
-
+function ListSelectorPlaceholder(obj) {
+    if(obj.data().month !== undefined) {
+        //console.log("Month: " + obj.data().month)
+        $("#month_dd_btn").html(obj.text() + ' <span class="caret"></span>');
+        $("#month_dd_btn").val(obj.text());
+    } else {
+        //console.log("Year: " + obj.data().year)
+        $("#year_dd_btn").html(obj.text() + ' <span class="caret"></span>');
+        $("#year_dd_btn").val(obj.text());
+    }
 }

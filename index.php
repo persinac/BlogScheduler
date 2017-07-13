@@ -149,6 +149,10 @@ require_once ("settings/settings.php");
             BuildServiceAccountSetup()
         });
 
+        $('#dyn_content').delegate('ul li a', 'click', function() {
+            ListSelectorPlaceholder($(this));
+        });
+
     });
     BuildBlogListTable()
 </script>
