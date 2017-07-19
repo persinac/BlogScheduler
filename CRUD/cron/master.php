@@ -24,23 +24,13 @@ echo "</br>";
 echo "</br>";
 $listOfMonthDataVW = array();
 $today = date('m/d/Y', time());
-$currentMonth = date('m', time());
-$currentYear = date('Y', time());
+/*
+ * Structure: stdClass->notifyDate, stdClass->blogDueDate
+ * */
+$notifyBlogDueDate = BuildNotifyAndBlogDueDate($today);
 $notifyDate = "";
 $blogDueDate = "";
-if($today <= date('m/d/Y', strtotime($currentMonth . "/10/" . $currentYear))) {
-    $notifyDate = date('m/d/Y', strtotime($currentMonth . '/10/' . $currentYear));
-    $blogDueDate = date('m/d/Y', strtotime($currentMonth . "/15/" . $currentYear));
-} else if($today <= date('m/d/Y', strtotime($currentMonth . "/15/" . $currentYear))) {
-    $notifyDate = date('m/d/Y', strtotime($currentMonth . "/15/" . $currentYear));
-    $blogDueDate = date('m/d/Y', strtotime($currentMonth . "/15/" . $currentYear));
-} else if($today <= date('m/d/Y', strtotime($currentMonth . "/20/" . $currentYear))) {
-    $notifyDate = date('m/d/Y', strtotime($currentMonth . "/20/" . $currentYear));
-    $blogDueDate = date('m/d/Y', strtotime($currentMonth . "/30/" . $currentYear));
-} else {
-    $notifyDate = date('m/d/Y', strtotime($currentMonth . "/30/" . $currentYear));
-    $blogDueDate = date('m/d/Y', strtotime($currentMonth . "/30/" . $currentYear));
-}
+
 foreach($monthData as $doc) {
 
     if(!empty($doc->employee->id)) {
@@ -48,7 +38,7 @@ foreach($monthData as $doc) {
         $mdev = new MonthDataEmployeeView(
            (string)$doc->_id,
           $doc->employee->id,
-          $doc->employee->email, $blogDueDate,
+          $doc->employee->email, $notifyBlogDueDate->blogDueDate,
             "",
           "",
           $doc->employee->firstName);
@@ -88,7 +78,7 @@ foreach($emailData as $sendTo) {
  * @return array
  */
 function GetMongoData($allEmployees = 0) {
-    $lowHigh = GenerateLowHighDateRange();
+    $lowHigh = DateUtilities::GenerateLowHighDateRange();
 
     $mongoObj = new MongoUtility();
     $mongoObj->SelectDBToUse("test");
@@ -97,16 +87,14 @@ function GetMongoData($allEmployees = 0) {
     default to old logic
     Pull from employee list instead of month data
     */
-    $collectionName = GetCurrentMonth() . GetCurrentYear();
+    $collectionName = DateUtilities::GetCurrentMonth() . DateUtilities::GetCurrentYear();
     if($allEmployees == 0) {
         $collectionName = "Employees";
     }
     $mongoObj->SelectCollection($collectionName);
 
     /* $gt = greater than */
-    $filter = [
-//        'date' => ['$gt' => $lowHigh->low]
-    ];
+    $filter = [ /*'date' => ['$gt' => $lowHigh->low]*/ ];
     $options = [];
     $result = $mongoObj->FindSpecific($filter, $options);
     $dataInRange[] = array();
@@ -171,4 +159,33 @@ function GetServiceAccount($email) {
     $result = $mongoObj->FindSpecific($filter, $options);
 //    var_dump($result);
     return $result;
+}
+
+function BuildNotifyAndBlogDueDate($dateToCompare) {
+    $currentMonth = DateUtilities::GenerateCurrentMonth();
+    $currentYear = DateUtilities::GenerateCurrentYear();
+    $newObj = new stdClass();
+    $notifyDate = "";
+    $blogDueDate = "";
+    /*
+     * Eventually make this dynamic to handle non-hardcoded notify dates
+     * Need to make user configuration
+     * */
+    if($dateToCompare <= DateUtilities::BuildSpecificDate($currentMonth, 10, $currentYear)) {
+        $notifyDate = DateUtilities::BuildSpecificDate($currentMonth, 10, $currentYear);
+        $blogDueDate = DateUtilities::BuildSpecificDate($currentMonth, 15, $currentYear);
+    } else if($dateToCompare <= DateUtilities::BuildSpecificDate($currentMonth, 15, $currentYear)) {
+        $notifyDate = DateUtilities::BuildSpecificDate($currentMonth, 15, $currentYear);
+        $blogDueDate = DateUtilities::BuildSpecificDate($currentMonth, 15, $currentYear);
+    } else if($dateToCompare <= DateUtilities::BuildSpecificDate($currentMonth, 20, $currentYear)) {
+        $notifyDate = DateUtilities::BuildSpecificDate($currentMonth, 20, $currentYear);
+        $blogDueDate = DateUtilities::BuildSpecificDate($currentMonth, 30, $currentYear);
+    } else {
+        $notifyDate = date('m/d/Y', strtotime($currentMonth . "/30/" . $currentYear));
+        $blogDueDate = date('m/d/Y', strtotime($currentMonth . "/30/" . $currentYear));
+    }
+
+    $newObj->notifyDate = $notifyDate;
+    $newObj->blogDueDate = $blogDueDate;
+    return $newObj;
 }
