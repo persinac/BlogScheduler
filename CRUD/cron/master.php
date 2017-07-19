@@ -16,8 +16,11 @@ require $root . '/CRUD/classes/Employee.php';
 require $root . '/CRUD/classes/MonthDataEmployeeView.php';
 require $root . '/CRUD/general/dateUtilities.php';
 require $root . '/CRUD/general/mailer.php';
+require $root . '/CRUD/classes/History.php';
 
 $monthData = GetMongoData();
+
+$history = new History("","",date('m/d/Y hh:mm', time()),"");
 
 $emailData = array();
 echo "</br>";
@@ -63,7 +66,9 @@ foreach($monthData as $doc) {
 
 foreach($emailData as $sendTo) {
     if(strlen($sendTo->empEmail) > 0) {
-        sendMail($sendTo);
+        $history->SetEvent("Email Sent");
+        $history->SetValue(sendMail($sendTo));
+        echo $history->GetEvent();
     }
 }
 /**

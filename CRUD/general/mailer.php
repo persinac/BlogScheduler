@@ -56,16 +56,17 @@ function sendMail($sendToObj)
     $mail->Body .= "\n\nPlease send/complete for Katherine Hyatt by 5pm!";
     $mail->Body .= " If you have already submitted your blog, please ignore this message.";
 //    var_dump($sendToObj);
+    $message = "";
     if($sendToObj->empEmail == 'alexp@originfitnessinc.com') {
         if (!$mail->send()) {
-            echo 'Message could not be sent to ' . $sendToObj->empEmail . '</br>';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            $message = 'Message could not be sent to ' . $sendToObj->empEmail . '</br>';
+            $message .=  'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            echo 'Message has been sent to: ' . $sendToObj->empEmail . '</br>';
+            $message =  'Message has been sent to: ' . $sendToObj->empEmail . '</br>';
         }
     } else {
-        echo "</br>Would send mail to:" . $sendToObj->empEmail;
+        $message =  "</br>Would send mail to:" . $sendToObj->empEmail;
     }
-
+    return $message;
 }
 
