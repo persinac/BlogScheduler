@@ -15,7 +15,7 @@ require_once $root . '/CRUD/classes/MonthDataEmployeeView.php';
 require_once $root . '/CRUD/classes/HTMLBuilder.php';
 require_once 'dateUtilities.php';
 
-$collectionName = GetCurrentMonth() . GetCurrentYear();
+$collectionName = DateUtilities::GetCurrentMonth() . DateUtilities::GetCurrentYear();
 $blogData_mongo = new BlogData_Mongo("test", $collectionName);
 $result = $blogData_mongo->GetAllBlogData();
 $listOfMonthDataVW = array();

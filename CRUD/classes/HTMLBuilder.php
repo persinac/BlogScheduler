@@ -50,6 +50,7 @@ class HTMLBuilder
     {
         foreach ($this->obj as $object) {
             foreach ($object["data"] as $items) {
+
                 $itemDataArr = json_decode(json_encode($items), True);
                 $this->html .= '<tr>';
                 if(count($order) > 0) {

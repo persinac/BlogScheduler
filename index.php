@@ -67,6 +67,7 @@ require_once ("settings/settings.php");
                 <li id="home" class="active"><a href="#">Home</a></li>
                 <li id="employeeList"><a href="#employeeList">Employee List</a></li>
                 <li id="actions"><a href="#actions">Actions</a></li>
+                <li id="history"><a href="#history">History</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -117,6 +118,7 @@ require_once ("settings/settings.php");
             $("#employeeList").removeClass("active");
             $("#home").addClass("active");
             $("#actions").removeClass("active");
+            $("#history").removeClass("active");
         });
 
         $("#employeeList a").click(function() {
@@ -124,6 +126,7 @@ require_once ("settings/settings.php");
             $("#employeeList").addClass("active");
             $("#home").removeClass("active");
             $("#actions").removeClass("active");
+            $("#history").removeClass("active");
         });
 
         $("#actions a").click(function() {
@@ -131,6 +134,15 @@ require_once ("settings/settings.php");
             $("#employeeList").removeClass("active");
             $("#home").removeClass("active");
             $("#actions").addClass("active");
+            $("#history").removeClass("active");
+        });
+
+        $("#history a").click(function() {
+            DisplayHistory("dyn_content");
+            $("#employeeList").removeClass("active");
+            $("#home").removeClass("active");
+            $("#actions").removeClass("active");
+            $("#history").addClass("active");
         });
 
         $('#dyn_content').delegate('table#employee tr td a.details', 'click', function() {

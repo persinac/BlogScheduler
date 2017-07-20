@@ -48,7 +48,7 @@ function sendMail($sendToObj)
     $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
     $mail->isHTML(false);                                  // Set email format to HTML
     */
-    $mail->Subject = 'Blog Notification - Blog Due';
+    $mail->Subject = 'TESTING AUTOMATED Blog Notification - Blog Due';
     $mail->Body = 'Hello ' . $sendToObj->empName;
     $mail->Body .= "\n\nYour blog is due on " . $sendToObj->date .'.';
     $mail->Body .= "\n\nHere is your blog template: ";
@@ -57,16 +57,16 @@ function sendMail($sendToObj)
     $mail->Body .= " If you have already submitted your blog, please ignore this message.";
 //    var_dump($sendToObj);
     $message = "";
-    if($sendToObj->empEmail == 'alexp@originfitnessinc.com') {
+//    if($sendToObj->empEmail == 'alexp@originfitnessinc.com') {
         if (!$mail->send()) {
-            $message = 'Message could not be sent to ' . $sendToObj->empEmail . '</br>';
-            $message .=  'Mailer Error: ' . $mail->ErrorInfo;
+            $message = 'Message could not be sent to ' . $sendToObj->empEmail;
+            $message .=  ' Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            $message =  'Message has been sent to: ' . $sendToObj->empEmail . '</br>';
+            $message =  'Message has been sent to: ' . $sendToObj->empEmail;
         }
-    } else {
-        $message =  "</br>Would send mail to:" . $sendToObj->empEmail;
-    }
+//    } else {
+//        $message =  "Would send mail to: " . $sendToObj->empEmail;
+//    }
     return $message;
 }
 

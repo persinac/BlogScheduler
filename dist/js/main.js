@@ -130,8 +130,9 @@ function SendAdHocEmail() {
         contentType: false,
         processData: false,
         success: function(response) {
-            //console.log(response);
-            $("#sendMailResponse").html(response);
+            console.log(response);
+            DisplayHistory("sendMailResponse");
+            //$("#sendMailResponse").html(DisplayHistory());
         }
     });
 }
@@ -197,4 +198,15 @@ function ListSelectorPlaceholder(obj) {
         $("#year_dd_btn").html(obj.text() + ' <span class="caret"></span>');
         $("#year_dd_btn").val(obj.text());
     }
+}
+
+function DisplayHistory(domId) {
+    $.ajax({
+        type: "GET",
+        url: "/CRUD/general/historyDisplay.php",
+        success: function(response) {
+            console.log(response);
+            $("#" + domId + "").html(response);
+        }
+    });
 }

@@ -48,19 +48,19 @@ class History
      * GETTERS
      */
 
-    function GetEvent($val) {
+    function GetEvent() {
         return $this->event;
     }
 
-    function GetValue($val) {
+    function GetValue() {
         return $this->value;
     }
 
-    function GetCreatedOn($val) {
+    function GetCreatedOn() {
         return $this->createdOn;
     }
 
-    function GetActor($val) {
+    function GetActor() {
         return $this->actor;
     }
 

@@ -17,18 +17,19 @@ require $root . '/CRUD/classes/MonthDataEmployeeView.php';
 require $root . '/CRUD/general/dateUtilities.php';
 require $root . '/CRUD/general/mailer.php';
 require $root . '/CRUD/classes/History.php';
+require $root . '/mongo/CRUD/classes/History_Mongo.php';
 
 $monthData = GetMongoData();
 
-$history = new History("","",date('m/d/Y hh:mm', time()),"");
+
+
+$historyMongo = new History_Mongo();
 
 $emailData = array();
-echo "</br>";
-echo "</br>";
 $listOfMonthDataVW = array();
 $today = date('m/d/Y', time());
 /*
- * Structure: stdClass->notifyDate, stdClass->blogDueDate
+ * $notifyBlogDueDate Structure: [stdClass]->notifyDate, [stdClass]->blogDueDate
  * */
 $notifyBlogDueDate = BuildNotifyAndBlogDueDate($today);
 $notifyDate = "";
@@ -63,14 +64,19 @@ foreach($monthData as $doc) {
        }
 }
 //var_dump($emailData);
-
+$historyArr = [];
 foreach($emailData as $sendTo) {
     if(strlen($sendTo->empEmail) > 0) {
-        $history->SetEvent("Email Sent");
+        $history = new History("","", "","");
+        $history->SetEvent("1");
         $history->SetValue(sendMail($sendTo));
-        echo $history->GetEvent();
+        $history->SetCreatedOn(date("m/d/Y h:i:s"));
+        $historyArr[] = $history;
     }
 }
+/* Insert history in bulk */
+$historyMongo->InsertIntoHistory($historyArr);
+
 /**
  * GetMongoData()
  *
